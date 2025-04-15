@@ -1,8 +1,14 @@
 from lib2to3.fixes.fix_input import context
 
-from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import RegistrationForm, NewRegistrationForm
+from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
 
 
 def register(request):
@@ -27,11 +33,27 @@ def register(request):
     return render(request, template_name="users/registration.html", context=context)
 
 def log_in(request):
-    pass
+    form = AuthenticationForm(request, request.POST)
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect(url)
+
+    context = {"form": form}
+    return render(request, template_name="users/login.html", context=context)
 
 def log_out(request):
-    pass
+    logout(request)
+    return redirect(("blog:index"))
 
 def user_profile(request, pk):
-    pass
+    user = get_object_or_404(User, pk=pk)
+    if request.user != user:
+        raise PermissionDenied()
+    context = {"user": user, "title": "Информация о пользователе"}
+    return render(request, template_name="user/profile.html", context=context)
+
 
