@@ -1,13 +1,13 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 {% block content %}
-<img src="{% static 'img/sunset.jpg '%}" width="200" height="auto">
+<img src="{% static 'img/sunset.jpg '%}" width="400" height="auto">
 
 
 <h1>Главная страница</h1>
 
 <div class="post-list">
-    {% for post in posts %}
+    {% for post in page_obj %}
         <div class="post-image">
         <h3><b>{{ post.author }}</b></h3>
             {% if post.image %}
@@ -20,6 +20,22 @@
         <p>{{ post.text }}</p>
         <p><i>{{ post.created_at }}</i></p>
     {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo;Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя&raquo;</a>
+        {% endif %}
+    </span>
 </div>
 
 {% endblock content %}

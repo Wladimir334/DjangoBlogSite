@@ -5,18 +5,31 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Post
 from .forms import PostForm
+from django.core.paginator import Paginator
 
 # Create your views here.
 
 
 def index(request):
-    # получение всех постов (select * from blog_post)
-    posts = Post.objects.all()
-    context = {"title": "Главная страница", "posts": posts}
+    # получение всех постов, отсортированных по дате публикации
+    # (select * from blog_post order by created_at DESC)
+    posts = Post.objects.all().order_by('-created_at')
+    count_posts = Post.objects.count()            # count_posts = len(posts)
+    # показываем по 3 потса на стрнице
+    paginator = Paginator(posts, 3)
+    # получаем номер стр из URL
+    page_number = request.GET.get('page')
+    # получаем обхекты для текущей стр
+    page_obj = paginator.get_page(page_number)
+    context = {"title": "Главная страница",
+               "page_obj": page_obj,
+               "count_posts": count_posts
+    }
     return render(request, template_name='blog/index.html', context=context)
 
 def about(request):
-    context = {"title": "О сайте"}
+    count_posts = Post.objects.count()
+    context = {"title": "О сайте", "count_posts": count_posts}
     return render(request, template_name='blog/about.html', context=context)
 
 def add_post(request):

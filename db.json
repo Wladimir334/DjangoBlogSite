@@ -1,0 +1,56 @@
+[
+
+{
+    "model": "blog.post",
+    "pk": 2,
+    "fields": {
+      "title": "Post 2",
+      "text": "Text 2",
+      "created_at": "2025-04-22T16:06:54.958Z",
+      "author": 2,
+      "image": "post/tree_SSWRMe1.jpg",
+      "slug": "post-2"
+    }
+},
+
+{
+    "model": "blog.post",
+    "pk": 3,
+    "fields": {
+      "title": "Post 3",
+      "text": "Text 2",
+      "created_at": "2025-04-22T16:06:54.958Z",
+      "author": 2,
+      "image": "post/tree_SSWRMe1.jpg",
+      "slug": "post-3"
+    }
+ },
+
+{
+    "model": "blog.post",
+    "pk": 4,
+    "fields": {
+      "title": "Post 4",
+      "text": "Text 2",
+      "created_at": "2025-04-22T16:06:54.958Z",
+      "author": 2,
+      "image": "post/tree_SSWRMe1.jpg",
+      "slug": "post-4"
+    }
+ },
+
+{
+    "model": "blog.post",
+    "pk": 1,
+    "fields": {
+      "title": "Post 1",
+      "text": "Text 2",
+      "created_at": "2025-04-22T16:06:54.958Z",
+      "author": 1,
+      "image": "post/tree_SSWRMe1.jpg",
+      "slug": "post-1"
+    }
+ }
+
+]
+

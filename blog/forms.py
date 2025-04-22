@@ -8,14 +8,15 @@ class PostForm(forms.Form):
     author = forms.ModelChoiceField(queryset=User.objects.all(), label="Автор")
     image = forms.ImageField(required=False, label="Изображение")
 
-class NewPostForms(forms.ModelForm):
+class PostForms(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = 'title', 'text', 'image',
 
         labels = {
             'title': "Заголовок",
             'text': "Текст поста",
+            'image': "Изображение"
         }
 
         # fields = ('title', 'text') добавляет перечисленные
