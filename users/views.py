@@ -39,11 +39,15 @@ def register(request):
 def log_in(request):
     form = AuthenticationForm(request, request.POST)
     if form.is_valid():
+        # получение логина и пароля из формы
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
+        # аутентификация пользователя (проверка наличия поль-ля и пароля)
         user = authenticate(username=username, password=password)
         if user:
+            # авторизация пользователя (получение прав доступа)
             login(request, user)
+            # получение дальнейшего маршрута после авторизации (next - путь, откуда пришел пользователь)
             url = request.GET.get('next', LOGIN_REDIRECT_URL)
             return redirect(url)
 
