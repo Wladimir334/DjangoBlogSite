@@ -1,8 +1,15 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 {% block content %}
-<img src="{% static 'img/sunset.jpg '%}" width="400" height="auto">
 
+<div>
+    <form action="" method="get" style="            ">
+        <input type="search" name="quesry">
+        <button type="submit">Поиск</button>
+    </form>
+</div>
+
+<img src="{% static 'img/sunset.jpg '%}" width="400" height="auto">
 
 <h1>Главная страница</h1>
 

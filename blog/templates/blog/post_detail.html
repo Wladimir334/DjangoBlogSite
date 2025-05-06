@@ -3,8 +3,16 @@
 
 {% block content %}
 <h1>Информация о посте № {{ post.pk }}</h1>
-{{ post.author }}
+
 <hr>
+{% if user.is_authenticated %}
+<a href="{% url 'blog:user_info' user_id=post.author.pk %}">
+    {{ post.author }}
+</a>
+{% else %}
+    {{ post.author }}
+{% endif %}
+
 <h3>{{ post.title }}</h3>
 
 {% if post.image %}
@@ -28,6 +36,7 @@
                 <button type="button">Удалить</button>
             </a>
         </div>
+    </div>
 {% endif %}
 {% if user == post.author %}
         <div class="btn-actions">
@@ -37,6 +46,7 @@
                 </a>
             </div>
         </div>
+{% endif %}
 {% if user.is_superuser %}
         <div class="btn-actions">
             <div class="btn-del-post">
