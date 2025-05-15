@@ -1,48 +1,68 @@
 {% extends 'blog/base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
 
 <div>
-    <form action="" method="get" style="            ">
-        <input type="search" name="quesry">
+    <form action="{% url 'blog:search_post' %}" method="get" style="display: flex; margin-right: 50px;">
+        <input type="search" name="query">
         <button type="submit">Поиск</button>
     </form>
 </div>
 
-<img src="{% static 'img/sunset.jpg '%}" width="400" height="auto">
+<div>
+    <form action="{% url 'blog:filter_post' %}" method="get" style="display: flex; margin-right: 50px;">
+        <input type="search" name="query">
+        <button type="submit">Фильтровать</button>
+    </form>
+</div>
 
-<h1>Главная страница</h1>
+<div>
+    <form action="" method="get" style="display: flex; margin-right: 50 px">
+        {{ filter_form.author }}
+        {{ filter_form.created_at }}
+        <button type="submit">Фильтровать</button>
+    </form>
+</div>
 
-<div class="post-list">
-    {% for post in page_obj %}
-        <div class="post-image">
-        <h3><b>{{ post.author }}</b></h3>
-            {% if post.image %}
-                <img src="{{ post.image.url }}" width="200px" height="auto">
-            {% else %}
-                <img src="{% static 'img/no.jpg'%}" width="150px" height="auto">
+{% if page_obj|length == 0 %}
+<h2>По вашему запросу ничего не найдено</h2>
+{% else %}
+    <img src="{% static 'img/sunset.jpg '%}" width="400" height="auto">
+
+    <h1>Главная страница</h1>
+
+    <div class="post-list">
+        {% for post in page_obj %}
+            <div class="post-image">
+            <h3><b>{{ post.author }}</b></h3>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" width="200px" height="auto">
+                {% else %}
+                    <img src="{% static 'img/no.jpg'%}" width="150px" height="auto">
+                {% endif %}
+            </div>
+            <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+            <p>{{ post.text }}</p>
+            <p><i>{{ post.created_at }}</i></p>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="/?page=1">&laquo;Первая</a>
+                <a href="/?page={{ page_obj.previous_page_number }}">Предыдущая</a>
             {% endif %}
-        </div>
-        <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
-        <p>{{ post.text }}</p>
-        <p><i>{{ post.created_at }}</i></p>
-    {% endfor %}
-</div>
-
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo;Первая</a>
-            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-        {% endif %}
-        <span class="current">
-            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?{% url_replace request 'page' page_obj.next_page_number %}">Следующая</a>
+                <a href="/?page={{ page_obj.paginator.num_pages }}">Последняя&raquo;</a>
+            {% endif %}
         </span>
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя&raquo;</a>
-        {% endif %}
-    </span>
-</div>
+    </div>
+{% endif %}
 
 {% endblock content %}
