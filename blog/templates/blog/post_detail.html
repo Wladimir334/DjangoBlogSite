@@ -24,7 +24,7 @@
 {{ post.text }}
 <p><i>{{ post.created_at }}</i></p>
 
-{% if user == post.author %}
+{% if user == post.author  %}
     <div class="btn-actions">
         <div class="btn-edit-post">
             <a href="{% url 'blog:update_post' pk=post.id %}">
@@ -46,15 +46,16 @@
                 </a>
             </div>
         </div>
-{% endif %}
-{% if user.is_superuser %}
-        <div class="btn-actions">
-            <div class="btn-del-post">
-                <a href="{% url 'blog:delete_post' pk=post.id %}">
-                    <button type="button">Удалить</button>
-                </a>
+    {% else %}
+        {% if user.is_superuser %}
+            <div class="btn-actions">
+                <div class="btn-del-post">
+                    <a href="{% url 'blog:delete_post' pk=post.id %}">
+                        <button type="button">Удалить</button>
+                    </a>
+                </div>
             </div>
-        </div>
+    {% endif %}
 {% endif %}
 
 {% endblock content %}

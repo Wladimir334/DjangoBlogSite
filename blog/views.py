@@ -60,27 +60,32 @@ def read_post(request, slug):
     context = {"title":"Информация о посте", "post": post}
     return render(request, template_name="blog/post_detail.html", context=context)
 
+@login_required
 def update_post(request, pk):
     #post = Post.objects.get(pk=pk)
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        post_form = PostForm(data=request.POST, files=request.FILES, author=request.user)
+        post_form = PostForm(data=request.POST,
+                             files=request.FILES,
+                             instance=post,
+                             initial={'author': post.author})
         if post_form.is_valid():
-            post.title = post_form.cleaned_data['title']
-            post.text = post_form.cleaned_data['text']
-            post.author = post_form.cleaned_data['author']  # request.user когда юзер зашёл под своим именем
-            post.image = post_form.cleaned_data['image']
-            post.save()
-            return redirect('blog:read_post', pk=post.id)
+            # post.title = post_form.cleaned_data['title']
+            # post.text = post_form.cleaned_data['text']
+            # post.author = post_form.cleaned_data['author']  # request.user когда юзер зашёл под своим именем
+            # post.image = post_form.cleaned_data['image']
+            post_form.save()
+            return redirect('blog:read_post', slug=post.slug)
     else:
         post_form = PostForm(initial={
             "title": post.title,
             "author": post.author,
             "text": post.text,
             "image": post.image
-        }
-        )
+        })
         return render(request, template_name="blog/post_edit.html", context={"form": post_form})
+
+@login_required
 def delete_post(request, pk):
     #post = Post.objects.get(pk=pk)
     post = get_object_or_404(Post, pk=pk)

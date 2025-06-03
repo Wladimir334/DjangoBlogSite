@@ -12,7 +12,10 @@ class PostForm(forms.ModelForm):
     # дополняем конструктор родительского класса
     def __init__(self, *args, **kwargs):
         # получаем author из именнованных аргументов (его передали во views)
-        author = kwargs.pop('author', None)
+        if kwargs.get('initial'):
+            author = kwargs['initial'].pop('author')
+        else:
+            author = kwargs.pop('author')
         # вызываем констроуктор родительского
         super().__init__(*args, **kwargs)
         # устанавливаем начальное значение поля author
